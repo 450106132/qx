@@ -1,0 +1,11 @@
+#!name=海角视频 Quantumult X Safari 修复版
+#!desc=API、HLS AES Key、Safari HTTPS Key 与 TS MIME 单文件修复
+#!author=Codex based on Yu9191 Rewrite
+
+hostname = haijiao.com, www.haijiao.com, *.hj260302818.top
+
+^https?:\/\/(www\.)?haijiao\.com\/api\/(banner\/banner_list|attachment|topic\/\d+)(?:\?.*)?$ url script-response-body https://raw.githubusercontent.com/450106132/qx/main/haijiao-qx.js
+^https?:\/\/ts\d+\.hj\d+\.top\/.*\.m3u8(?:\?.*)?$ url script-response-body https://raw.githubusercontent.com/450106132/qx/main/haijiao-qx.js
+^https?:\/\/ts\d+\.hj\d+\.top\/__qx_hj_key__\/[0-9a-fA-F]{32}\.key(?:\?.*)?$ url script-echo-response https://raw.githubusercontent.com/450106132/qx/main/haijiao-qx.js
+^https?:\/\/ts\d+\.hj\d+\.top\/.*\.ts(?:\?.*)?$ url script-response-header https://raw.githubusercontent.com/450106132/qx/main/haijiao-qx.js
+
