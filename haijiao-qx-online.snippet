@@ -1,11 +1,23 @@
-#!name=海角视频 Quantumult X Safari 修复版
-#!desc=API、HLS AES Key、Safari HTTPS Key 与 TS MIME 单文件修复
-#!author=Codex based on Yu9191 Rewrite
+#!name=海角视频 Quantumult X（域名无关 · 单点维护）
+#!desc=规则内不含任何硬编码域名；换域名只改下面 hostname 一行
+#!author=based on Yu9191 / Codex Rewrite
 
-hostname = haijiao.com, www.haijiao.com, *.hj260302818.top
+# ══════════════ 唯一维护点：换域名只改这一行 ══════════════
+# 主站域名 + 备用域名族，英文逗号分隔；QX 的 hostname 支持 * 和 ? 通配
+# 主站被换成新域名时，把新域名追加到行尾即可
+hostname = haijiao.com, *.haijiao.com, *.hj*.top, *.hj*.com, *.hj*.cc, *.hj*.xyz
 
-^https?:\/\/(www\.)?haijiao\.com\/api\/(banner\/banner_list|attachment|topic\/\d+)(?:\?.*)?$ url script-response-body https://raw.githubusercontent.com/450106132/qx/main/haijiao-qx.js
-^https?:\/\/ts\d+\.hj\d+\.top\/.*\.m3u8(?:\?.*)?$ url script-response-body https://raw.githubusercontent.com/450106132/qx/main/haijiao-qx.js
-^https?:\/\/ts\d+\.hj\d+\.top\/__qx_hj_key__\/[0-9a-fA-F]{32}\.key(?:\?.*)?$ url script-echo-response https://raw.githubusercontent.com/450106132/qx/main/haijiao-qx.js
-^https?:\/\/ts\d+\.hj\d+\.top\/.*\.ts(?:\?.*)?$ url script-response-header https://raw.githubusercontent.com/450106132/qx/main/haijiao-qx.js
+# ══════════════ 以下 4 条规则永久不用动（域名已通配）══════════════
+# JS 本身零域名硬编码：attachment / m3u8 / key 全部从 request.url 现场解析 origin
+^https?:\/\/[^/]+\/api\/(banner\/banner_list|attachment|topic\/\d+)(?:\?.*)?$ url script-response-body https://cdn.jsdelivr.net/gh/450106132/qx@main/haijiao-qx.js
+^https?:\/\/[^/]+\/.*\.m3u8(?:\?.*)?$ url script-response-body https://cdn.jsdelivr.net/gh/450106132/qx@main/haijiao-qx.js
+^https?:\/\/[^/]+\/__qx_hj_key__\/[0-9a-fA-F]{32}\.key(?:\?.*)?$ url script-echo-response https://cdn.jsdelivr.net/gh/450106132/qx@main/haijiao-qx.js
+^https?:\/\/[^/]+\/.*\.ts(?:\?.*)?$ url script-response-header https://cdn.jsdelivr.net/gh/450106132/qx@main/haijiao-qx.js
 
+# 备选 JS 地址（raw 被墙时用上面 jsdelivr；以下任选其一替换到 4 条规则里）
+# https://ghproxy.net/https://raw.githubusercontent.com/450106132/qx/main/haijiao-qx.js
+# https://raw.githubusercontent.com/450106132/qx/main/haijiao-qx.js
+
+# ══════════════ 想彻底不维护域名？把 hostname 换成下面这行 ══════════════
+# 代价：所有 HTTPS 流量都进 MITM 与规则匹配，耗电、误伤概率上升，官方明确警告慎用
+# hostname = *
